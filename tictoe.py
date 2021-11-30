@@ -25,7 +25,9 @@ def win(mark):
     # across right top-bottom 8th ()
     return((blist[1] == blist[2] == blist[3] == mark) or (blist[4] == blist[5] == blist[6] == mark) or (blist[7] == blist[8] == blist[9] == mark) or (blist[1] == blist[5] == blist[9] == mark) or (blist[3] == blist[5] == blist[7] == mark) or (blist[1] == blist[4] == blist[7] == mark) or (blist[2] == blist[5] == blist[8] == mark) or (blist[3] == blist[6] == blist[9] == mark))
     # or
-    # # return((blist[1] == blist[2] == blist[3] == mark) or (blist[4] == blist[5] == blist[6] == mark) or (blist[7] == blist[8] == blist[9] == mark) or (blist[1] == blist[5] == blist[9] == mark) or (blist[3] == blist[5] == blist[7] == mark))
+    # return((blist[1] == blist[2] == blist[3] == mark) or (blist[4] == blist[5] == blist[6] == mark) or (blist[7] == blist[8] == blist[9] == mark) or (blist[1] == blist[5] == blist[9] == mark) or (blist[3] == blist[5] == blist[7] == mark))
+
+
 # Check if the position is blank or not
 def blank_pos(position):
     return blist[position] == ' '
