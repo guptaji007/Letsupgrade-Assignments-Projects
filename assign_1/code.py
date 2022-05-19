@@ -1,3 +1,4 @@
+# Assigment 1: Add text to an image
 # Function Based Code
 # Author: Deepu S Gupta
 # Date: 03/04/2022

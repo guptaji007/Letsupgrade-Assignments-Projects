@@ -1,0 +1,8 @@
+Task Manager App
+Make a GUI application (using  tkinter or any other package) for a task management app :
+1)The user will add activities which he/she wants to complete.  
+2) The required fields to be added are task Name, task description, completion date and status.
+3)User will be able to see all the task that have been added into the application. Each assigned task will be given a distinct colour except green, yellow and red.
+4) The status shall be controlled by a toggleable switch with 3 position to-do, in-progress and completed. The position must have their own colour as any random for to-do, yellow for in progress and green for completed.
+5)Task which are overdue i.e. if it is not completed before the mentioned date, then it will be highlighted in red saying it is not completed(optionally an email can also be sent to the User alerting him/her).
+6) User will also have a delete option to delete a task.
