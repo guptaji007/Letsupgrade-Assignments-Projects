@@ -1,13 +1,29 @@
-from datetime import datetime
 from tkinter import *
 from tkinter import ttk
 from tkcalendar import DateEntry # DateEntry widget
+from datetime import datetime
+import smtplib as s # For sending email
+
+# SMTP Configuration and Email Function
+def send_mail(task):
+    sm = s.SMTP('smtp.gmail.com', 587)
+    sm.ehlo()
+    sm.starttls()
+    sm.login('test@gmail.com', 'testpassword') # replace placeholder email, password with your own
+    sender = 'test@gmail.com' # sender email address
+    mail_receiver = 'receivertest@gmail.com' # receiver email address
+    subject = "Task Manager - Task is not completed!" 
+    body = f"Hi {mail_receiver},\n\nThis is a reminder that you have a {task} that is not completed yet!\n\n"
+    msg = f"subject: {subject}\n\n{body}"
+    sm.sendmail(sender, mail_receiver, msg)
+    print("Email Sent Successfully.")
+    sm.quit()
 
 # Win Main Configurations
 win = Tk()
 win.title("Task Manager")
 win.iconbitmap("images/task.ico")
-win.geometry("1000x480")
+win.geometry("1030x480")
 win.resizable(False, False)
 
 # Define Column
@@ -15,8 +31,8 @@ tree = ttk.Treeview(win, columns=('Name', 'Description', 'Date', 'Status'), heig
 tree.column('#0', width=0, stretch=NO)
 tree.column('Name', width=220, anchor=CENTER)
 tree.column('Description', width=500, anchor=CENTER)
-tree.column('Date', width=125, anchor=CENTER)
-tree.column('Status', width=125, anchor=CENTER)
+tree.column('Date', width=130, anchor=CENTER)
+tree.column('Status', width=160, anchor=CENTER)
 
 # Creating headings
 tree.heading('#0', text='')
@@ -26,8 +42,8 @@ tree.heading('Date', text='Date', anchor=CENTER)
 tree.heading('Status', text='Status', anchor=CENTER)
 
 # Global Variables
-current_row = 0
-current_date = datetime.now().strftime("%d/%m/%Y")
+current_row = 0 # For inserting new task
+current_date = datetime.now().strftime("%d%m%Y") # current date format is 05052022
 
 # Add Task Function
 def add_task():
@@ -36,18 +52,23 @@ def add_task():
     tname = task_name.get()
     tdesc = task_desc.get('1.0', END)
     tdate = task_date.get()
+    cdate = task_date.get().replace('/', '') # convert date in 06052022 format to compare with current date
     tstatus = task_chan_status.get()
 
-    if tstatus == 'to-do' and tdate > current_date:
+    if (tstatus == 'to-do') and (cdate < current_date):
+        tstatus = "It's not completed!"
         tree.insert('', current_row, text='', values=(tname, tdesc, tdate, tstatus),
                     tags=('todo_red'))
-    elif tstatus == 'to-do' and tdate <= current_date:
+        send_mail(tname)
+    elif (tstatus == 'to-do') and (cdate >= current_date):
         tree.insert('', current_row, text='', values=(tname, tdesc, tdate, tstatus),
                     tags=('todo'))
-    elif tstatus == 'in-progress' and tdate > current_date:
+    elif (tstatus == 'in-progress') and (cdate < current_date):
+        tstatus = "It's not completed!"
         tree.insert('', current_row, text='', values=(tname, tdesc, tdate, tstatus),
                     tags=('inprogress_red'))
-    elif tstatus == 'in-progress' and tdate <= current_date:
+        send_mail(tname)
+    elif (tstatus == 'in-progress') and (cdate >= current_date):
         tree.insert('', current_row, text='', values=(tname, tdesc, tdate, tstatus),
                     tags=('inprogress'))
     else:
@@ -67,19 +88,24 @@ def update_task():
     tname = task_name.get()
     tdesc = task_desc.get('1.0', END)
     tdate = task_date.get()
+    cdate = task_date.get().replace('/', '') # convert date in 06052022 format to compare with current date
     tstatus = task_chan_status.get()
     
     for i in tree.selection():
-        if tstatus == 'to-do' and tdate > current_date:
+        if (tstatus == 'to-do') and (cdate < current_date):
+            tstatus = "It's not completed!"
             tree.item(i, values=(tname, tdesc, tdate, tstatus),
                     tags=('todo_red'))
-        elif tstatus == 'to-do' and tdate <= current_date:
+            send_mail(tname)
+        elif (tstatus == 'to-do') and (cdate >= current_date):
             tree.item(i, values=(tname, tdesc, tdate, tstatus),
                     tags=('todo'))
-        elif tstatus == 'in-progress' and tdate > current_date:
+        elif (tstatus == 'in-progress') and (cdate < current_date):
+            tstatus = "It's not completed!"
             tree.item(i, values=(tname, tdesc, tdate, tstatus),
                     tags=('inprogress_red'))
-        elif tstatus == 'in-progress' and tdate <= current_date:
+            send_mail(tname)
+        elif (tstatus == 'in-progress') and (cdate >= current_date):
             tree.item(i, values=(tname, tdesc, tdate, tstatus),
                     tags=('inprogress'))
         else:
